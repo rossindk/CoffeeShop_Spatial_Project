@@ -1,0 +1,95 @@
+# Data Description
+
+## Overview
+
+This project integrates multiple spatial and non-spatial datasets to analyze the accessibility of coffee shops across Jakarta. The data originates from open-source platforms and government statistics portals.
+
+---
+
+## 1. Coffee Shop Locations
+
+**Source:** OpenStreetMap (OSM)  
+**Data Type:** Point Geometry  
+**Format:** Extracted OSM Points → CSV → PostGIS  
+
+### Attributes:
+- Name
+- Address
+- Administrative area names
+- Latitude & Longitude
+- Geometry (Point, SRID 4326)
+
+### Description:
+This dataset contains the locations of coffee shops mapped by OpenStreetMap contributors. It represents the supply side of café accessibility.
+
+### Limitations:
+- OSM is crowd-sourced → may contain missing or outdated entries
+- Some cafés may not yet be mapped
+- Attribute completeness varies
+
+---
+
+## 2. Administrative Boundaries
+
+**Source:** GADM (Global Administrative Areas Database)  
+**Data Type:** Polygon Geometry  
+**Format:** Shapefile (.shp) → Imported into PostGIS  
+
+### Spatial Details:
+- Level: Subdistrict (Kecamatan)
+- Coordinate System: WGS84 (EPSG:4326)
+
+### Description:
+This dataset provides the spatial boundaries required for aggregating coffee shop counts and performing spatial joins.
+
+### Limitations:
+- Boundary data may not reflect recent administrative changes
+- Minor geometric inaccuracies possible
+
+---
+
+## 3. Population Statistics
+
+**Source:** Jakarta Open Data Portal  
+**Data Type:** Tabular Data (Non-Spatial)  
+**Format:** Excel → CSV → PostgreSQL  
+
+### Attributes:
+- Reporting period
+- District name
+- Subdistrict name
+- Total population
+- Population density
+
+### Description:
+This dataset represents the demand side of the analysis, allowing accessibility metrics to be calculated.
+
+### Limitations:
+- Temporal differences between datasets
+- Naming inconsistencies requiring normalization
+
+---
+
+## 4. Data Integration Process
+
+To ensure consistency across datasets:
+
+- Administrative names were standardized using SQL string cleaning
+- Spatial joins linked café points to administrative polygons
+- Region identifiers were introduced to maintain relational integrity
+
+---
+
+## 5. Coordinate Reference System
+
+All spatial datasets were standardized to:
+
+**EPSG:4326 — WGS84 Geographic Coordinate System**
+
+This ensures compatibility across PostGIS, QGIS, and web mapping platforms.
+
+---
+
+## Summary
+
+The integration of open spatial data and official demographic statistics enables a comprehensive analysis of service accessibility. However, results should be interpreted with consideration of data completeness and temporal limitations.
